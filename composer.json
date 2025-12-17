@@ -1,0 +1,17 @@
+{
+    "name": "patgrudniewski/sorted-list",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "PatGrudniewski\\SortedList\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Patryk Grudniewski",
+            "email": "patgrudniewski@gmail.com"
+        }
+    ],
+    "require": {}
+}
