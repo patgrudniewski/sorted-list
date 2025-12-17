@@ -1,0 +1,24 @@
+services:
+  composer:
+    build:
+      context: .
+      target: build
+    volumes:
+      - "./composer.json:/app/composer.json"
+      - "./src:/app/src:ro"
+      - "./vendor:/app/vendor"
+    entrypoint: ["/usr/bin/composer"]
+    command: ["install", "--no-interaction"]
+
+  php:
+    build:
+      context: .
+      target: cli
+    volumes:
+      - "./src:/app/src:ro"
+      - "./tests:/app/tests:ro"
+      - "./vendor:/app/vendor:ro"
+    depends_on:
+      composer:
+        condition: service_completed_successfully
+        required: true

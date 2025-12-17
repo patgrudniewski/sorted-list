@@ -1,5 +1,6 @@
 {
     "name": "patgrudniewski/sorted-list",
+    "version": "0.0.1",
     "type": "library",
     "license": "MIT",
     "autoload": {
@@ -13,5 +14,10 @@
             "email": "patgrudniewski@gmail.com"
         }
     ],
-    "require": {}
+    "require": {
+        "php": "^8.4"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^12.5"
+    }
 }
