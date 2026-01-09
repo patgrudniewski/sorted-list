@@ -32,6 +32,12 @@ final class SortedLinkedListTest extends TestCase
             ['bar', 'bad', 'baz'],
             ['bad', 'bar', 'baz', 'foo'],
         ];
+
+        yield 'string of different length' => [
+            'a',
+            ['aaa', 'aa', 'b'],
+            ['a', 'aa', 'aaa', 'b'],
+        ];
     }
 
     public static function provideInvalidData(): iterable
