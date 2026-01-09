@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
 
 final class SortedLinkedListTest extends TestCase
 {
-    public static function provideData(): iterable
+    public static function provideValidData(): iterable
     {
         yield 'lowest element is added to the beginning of the list' => [2, [1], [1, 2]];
 
@@ -26,10 +26,22 @@ final class SortedLinkedListTest extends TestCase
             [2, 5, 3, 1, 21, 13, 34],
             [1, 2, 3, 5, 8, 13, 21, 34],
         ];
+
+        yield 'string elements' => [
+            'foo',
+            ['bar', 'bad', 'baz'],
+            ['bad', 'bar', 'baz', 'foo'],
+        ];
     }
 
-    #[DataProvider('provideData', false), Test]
-    public function newlyCreatedListDoesIsNotLinked(int $initialValue): void
+    public static function provideInvalidData(): iterable
+    {
+        yield 'trying to add string to int-based list' => [1, 'foo'];
+        yield 'trying to add int to string-based list' => ['bar', 7];
+    }
+
+    #[DataProvider('provideValidData', false), Test]
+    public function newlyCreatedListDoesIsNotLinked(int|string $initialValue): void
     {
         $handle = new SortedLinkedList($initialValue);
 
@@ -37,17 +49,17 @@ final class SortedLinkedListTest extends TestCase
         self::assertNull($handle->previous);
     }
 
-    #[DataProvider('provideData', false), Test]
-    public function createdListContainsValidValue(int $initialValue): void
+    #[DataProvider('provideValidData', false), Test]
+    public function createdListContainsValidValue(int|string $initialValue): void
     {
         $handle = new SortedLinkedList($initialValue);
 
         self::assertSame($initialValue, $handle->value);
     }
 
-    #[DataProvider('provideData'), Test]
+    #[DataProvider('provideValidData'), Test]
     public function ordersListElements(
-        int $initialValue,
+        int|string $initialValue,
         array $otherValues,
         array $expectedOrder,
     ): void {
@@ -66,5 +78,16 @@ final class SortedLinkedListTest extends TestCase
                 $handle = $handle->next;
             }
         }
+    }
+
+    #[DataProvider('provideInvalidData'), Test]
+    public function throwsInvalidArgumentExceptionWhenTryingToAddItemOfAnotherType(
+        int|string $initialValue,
+        int|string $otherValue,
+    ): void {
+        $handle = new SortedLinkedList($initialValue);
+        $this->expectException(InvalidArgumentException::class);
+
+        $handle->addItem($otherValue);
     }
 }
