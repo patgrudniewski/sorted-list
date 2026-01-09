@@ -51,14 +51,9 @@ final class SortedLinkedList implements LinkedListInterface
         }
     }
 
-    private function matchesJustAfter(int|string $value): bool
+    private function compare(int|string $value): int
     {
-        return $value >= $this->value && (null === $this->next || $value <= $this->next->value);
-    }
-
-    private function matchesJustBefore(int|string $value): bool
-    {
-        return $value <= $this->value && (null === $this->previous || $value >= $this->previous->value);
+        return $this->value <=> $value;
     }
 
     /**
@@ -66,14 +61,14 @@ final class SortedLinkedList implements LinkedListInterface
      */
     private function match(int|string $value): array
     {
-        if ($value > $this->value) {
-            if ($this->matchesJustAfter($value)) {
+        if (0 > $this->compare($value)) {
+            if (null === $this->next || 0 < $this->next->compare($value)) {
                 return [$this, $this->next];
             }
 
             return $this->next->match($value);
         } else {
-            if ($this->matchesJustBefore($value)) {
+            if (null === $this->previous || 0 > $this->previous->compare($value)) {
                 return [$this->previous, $this];
             }
 
